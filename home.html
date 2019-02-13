@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FullThrottle</title>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+
+<style>
+.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2px;
+  border-radius: 5px;
+  background: #000;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #000;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: grey;
+  cursor: pointer;
+}
+div.card {
+  width: 500px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+}
+</style>
+
+</head>
+<body>
+<br><br>
+<div class="container card" style="background-color: #F2FAF4">
+
+    <div class="text-center">
+        <h1>Loan Calculator</h1>
+        <h4>Facing Cash Crunch? Borrow From Us!!!</h4><br><br>
+
+    </div>
+
+    <div class="padding1 text-center" style="margin-top: 5%">
+        <form class="form-inline">
+
+
+            <center><div class="slidecontainer">
+    <input type="range" min="500" max="5000" value="500" class="slider" id="myRange"><br>
+    <p style="display: inline-block;margin-right: 40%;"><h3>You Borrow </h3><p>$ <span id="demo"></span></p></p>
+    </div></center<br>    
+            <div class="input-group">
+                <span style="position: absolute; z-index: 999; left: 8px; top: 10px;"></span>
+                <input id="CityTextBox" type="name" class="form-control AmountTextBox" style="border-radius:10px; padding-left: 30px;" size="50" placeholder="Enter a loan amount($)" required>
+                </input>
+            </div>
+        </form>
+    </div><br>
+
+
+    <div class="padding1 text-center">
+        <form class="form-inline">
+            <div class="input-group">
+                <span style="position: absolute; z-index: 999; left: 8px; top: 10px;"></span>
+                <input id="CityTextBox" type="name" class="form-control MonthTextBox" style="border-radius:10px; padding-left: 30px;" size="50" placeholder="Enter the loan duration(months)" required>
+                </input>
+            </div>
+        </form>
+    </div><br>
+
+    <center><button type="button" class="btn SubmitBtn text-center" style="width: 45%;height: 50%;">Click to see your loan details</button></center><br><br>
+
+    <div class="text-center">
+    <textarea placeholder="Interest rate" rows="2" cols="15" id="Interest-rate" style="margin-right: 5%;border-radius: 10px;">
+    </textarea>
+
+    <textarea placeholder="Monthly Payment" rows="2" cols="15" id="Monthly-payment" style="border-radius: 10px;">
+    </textarea>
+    </div><br><br>
+
+    <p style="display: inline-block;">You pay </p><p>$ <span id ="Total-payment">0</span></p>
+
+    <center><button type="button" class="btn SubmitBtn text-center" style="width: 50%;height: 50%;">Apply for loan</button></center><br><br>
+
+
+</div>
+</body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script>
+
+$(".SubmitBtn" ).click(function() {
+var apiurl = 'https://ftl-frontend-test.herokuapp.com/interest?amount=';
+var month = '&numMonths=';
+$.ajax({
+  url: apiurl + $(".AmountTextBox").val() + month + $(".MonthTextBox").val(),
+  success: function(result){
+
+    console.log(result)
+    $("#Interest-rate").text(result.interestRate)
+    $("#Monthly-payment").text(result.monthlyPayment.amount)
+    $('#Total-payment').text(result.principal.amount + result.monthlyPayment.amount)
+  }
+})
+});
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
+
+</script>
+
+</html>
